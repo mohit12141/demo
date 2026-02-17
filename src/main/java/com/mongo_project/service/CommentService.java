@@ -1,6 +1,7 @@
 package com.mongo_project.service;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -38,5 +39,14 @@ public class CommentService {
     public CommentResponse getCountByEmail(String email){
         long count = commentRepository.getCountByEmail(email);
         return new CommentResponse("200", count + " comments found with email starting with " + email, null);
+    }
+
+    public CommentResponse getCommentByDateRange(LocalDateTime startDate, LocalDateTime endDate){
+        List<Comment> list = commentRepository.findByDateRange(startDate, endDate);
+        if(list.size() == 0 || list.isEmpty()) {
+            return new CommentResponse("404", "No comments found", null);
+        }
+
+        return new CommentResponse("200", "Comment's found", list);
     }
 }
